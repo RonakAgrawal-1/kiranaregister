@@ -24,7 +24,8 @@ public class TransactionServiceImpl implements TransactionService {
             throw new IllegalArgumentException("Invalid transaction data");
         }
         // If the currency is INR, keep it as is
-        if (Constants.CURRENCY_INR.equals(transaction.getCurrency())) {
+        if (Constants.CURRENCY_INR.equals(transaction.getCurrency().toUpperCase())) {
+            transaction.setCurrency("INR");
             transactionRepository.save(transaction);
         } else {
             // Convert amount to USD for currencies other than INR
