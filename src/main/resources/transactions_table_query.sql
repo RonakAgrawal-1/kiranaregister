@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS transactions (
     timestamp TIMESTAMP,
     description VARCHAR(255),
     amount NUMERIC,
-    currency VARCHAR(3)
+    currency VARCHAR(3),
+    transaction_type VARCHAR(10)
 );

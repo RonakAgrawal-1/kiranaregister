@@ -14,7 +14,8 @@
         "timestamp": "2024-01-31T12:30:00",
         "description": "Sample Transaction",
         "amount": 100.0,
-        "currency": "INR"
+        "currency": "INR",
+        "transactionType": "credit"
       }
       ```
 - **Response:**

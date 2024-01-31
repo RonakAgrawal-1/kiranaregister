@@ -20,7 +20,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void recordTransaction(Transaction transaction) {
-        if (transaction == null || transaction.getAmount() == null || transaction.getTimestamp() == null) {
+        if (transaction == null || transaction.getAmount() == null || transaction.getTimestamp() == null || transaction.getTransactionType() == null) {
             throw new IllegalArgumentException("Invalid transaction data");
         }
         // If the currency is INR, keep it as is

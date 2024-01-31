@@ -33,7 +33,7 @@ class TransactionServiceImplTest {
 
     @Test
     void testRecordTransaction_Success_INR() {
-        Transaction validTransaction = createTransaction(Constants.CURRENCY_INR, BigDecimal.TEN);
+        Transaction validTransaction = createTransaction("credit", Constants.CURRENCY_INR, BigDecimal.TEN);
         transactionService.recordTransaction(validTransaction);
 
         Mockito.verify(transactionRepository).save(validTransaction);
@@ -41,7 +41,7 @@ class TransactionServiceImplTest {
 
     @Test
     void testRecordTransaction_Success_OtherCurrency() {
-        Transaction validTransaction = createTransaction("EUR", BigDecimal.TEN);
+        Transaction validTransaction = createTransaction("debit", "EUR", BigDecimal.TEN);
 
         when(currencyConversionService.getExchangeRate("EUR", Constants.CURRENCY_USD)).thenReturn(BigDecimal.valueOf(2));
         transactionService.recordTransaction(validTransaction);
@@ -54,7 +54,7 @@ class TransactionServiceImplTest {
 
     @Test
     void testRecordTransaction_CurrencyExchangeRateNotFoundException() {
-        Transaction invalidTransaction = createTransaction("GBP", BigDecimal.TEN);
+        Transaction invalidTransaction = createTransaction("credit","GBP", BigDecimal.TEN);
 
         when(currencyConversionService.getExchangeRate("GBP", Constants.CURRENCY_USD))
                 .thenThrow(new CurrencyExchangeRateNotFoundException("Exchange rate not found"));
@@ -73,7 +73,7 @@ class TransactionServiceImplTest {
         LocalDateTime startDateTime = validDate.atStartOfDay();
         LocalDateTime endDateTime = validDate.atTime(23, 59, 59);
 
-        List<Transaction> mockTransactions = Collections.singletonList(createTransaction(Constants.CURRENCY_INR, BigDecimal.TEN));
+        List<Transaction> mockTransactions = Collections.singletonList(createTransaction("debit", Constants.CURRENCY_INR, BigDecimal.TEN));
         when(transactionRepository.findByTimestampBetween(startDateTime, endDateTime)).thenReturn(mockTransactions);
 
         List<Transaction> result = transactionService.getDailyTransactions(validDate);
@@ -81,11 +81,12 @@ class TransactionServiceImplTest {
         assertEquals(mockTransactions, result);
     }
 
-    private Transaction createTransaction(String currency, BigDecimal amount) {
+    private Transaction createTransaction(String transactionType, String currency, BigDecimal amount) {
         Transaction transaction = new Transaction();
         transaction.setTimestamp(LocalDateTime.now());
         transaction.setAmount(amount);
         transaction.setCurrency(currency);
+        transaction.setTransactionType(transactionType);
         return transaction;
     }
 }
