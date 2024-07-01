@@ -6,3 +6,11 @@ FROM information_schema.tables
 WHERE table_schema = 'public'  -- Replace with your schema name
   AND table_name = 'my_table'
   AND table_type = 'BASE TABLE';
+
+SELECT 
+    COUNT(*) AS partition_exists
+FROM 
+    information_schema.tables
+WHERE 
+    table_schema = SCHEMA()  -- use the current schema
+    AND table_name = 'your_partition_table_name';  -- replace with your partition table name
