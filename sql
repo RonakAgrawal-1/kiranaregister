@@ -14,3 +14,12 @@ FROM
 WHERE 
     table_schema = SCHEMA()  -- use the current schema
     AND table_name = 'your_partition_table_name';  -- replace with your partition table name
+
+-- src/main/resources/check_partition_exists.sql
+
+SELECT 1
+FROM pg_catalog.pg_inherits i
+JOIN pg_catalog.pg_class c ON i.inhrelid = c.oid
+JOIN pg_catalog.pg_class p ON i.inhparent = p.oid
+WHERE p.relname = :tableName AND c.relname = :partitionTableName;
+
